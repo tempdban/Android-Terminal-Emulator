@@ -129,6 +129,8 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
     private boolean mAlreadyStarted = false;
     private boolean mStopServiceOnFinish = false;
 
+    private static boolean mVimFlavor;
+
     private Intent TSIntent;
 
     public static final int REQUEST_CHOOSE_WINDOW = 1;
@@ -349,9 +351,8 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
         mSettings = new TermSettings(getResources(), mPrefs);
         mPrefs.registerOnSharedPreferenceChangeListener(this);
 
-        boolean vimflavor = this.getPackageName().matches(".*vim.androidterm.*");
-
-        if (!vimflavor && mSettings.doPathExtensions()) {
+        mVimFlavor = BuildConfig.FLAVOR.equals("vim");
+        if (!mVimFlavor && mSettings.doPathExtensions()) {
             mPathReceiver = new BroadcastReceiver() {
                 public void onReceive(Context context, Intent intent) {
                     String path = makePathFromBundle(getResultExtras(false));
@@ -880,6 +881,9 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
 //        } else {
 //            menu.removeItem(R.id.menu_user);
 //        }
+        if (!jackpal.androidterm.BuildConfig.FLAVOR.equals("vim")) {
+            menu.removeItem(R.id.menu_edit_vimrc);
+        }
         return true;
     }
 
@@ -935,6 +939,8 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
             setFunctionBar(2);
         } else if (id == R.id.menu_update) {
             networkUpdate();
+        } else if (id == R.id.menu_edit_vimrc) {
+            sendKeyStrings(":exe $MYVIMRC == '' ? 'e $HOME/.vimrc' : 'e $MYVIMRC'\r", true);
         } else if (id == R.id.menu_toggle_wakelock) {
             doToggleWakeLock();
         } else if (id == R.id.menu_toggle_wifilock) {
