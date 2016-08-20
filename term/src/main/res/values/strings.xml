@@ -38,6 +38,8 @@
 
    <string name="menu_update">Update</string>
    <string name="menu_update_latest">Already updated.</string>
+   <string name="menu_update_vim_latest">Vim has been already updated.</string>
+   <string name="menu_update_vim_success">Vim has been successfully downloaded.\nPlease restart.</string>
 
    <string name="edit_vimrc">Edit .vimrc</string>
 

@@ -37,6 +37,8 @@
 
    <string name="menu_update">更新チェック</string>
    <string name="menu_update_latest">アプリは最新です</string>
+   <string name="menu_update_vim_latest">Vimは最新です</string>
+   <string name="menu_update_vim_success">Vimのダウンロードに成功しました\n更新のためアプリを再起動してください</string>
 
    <string name="edit_vimrc">.vimrcを編集</string>
 
@@ -250,7 +252,7 @@
 
   <string name="help">ヘルプ</string>
   <string name="help_url">https://sites.google.com/site/fudist/Home/qfixhowm/other-service/howm-android/android-terminal-emulator-mod</string>
-  <string name="update_url">https://sites.google.com/site/fudist/Home/qfixhowm/other-service/howm-android/android-terminal-emulator-mod#download</string>
+  <string name="update_url">https://sites.google.com/site/fudist/Home/qfixhowm/other-service/howm-android/term-vim#download</string>
   <!-- AddShortcut.java -->
   <string name="addshortcut_button_find_command">コマンド指定</string>
   <string name="addshortcut_command_window_instructions">コマンドはフルパスで指定し引数は省略可. フルパスで指定しない場合は引数ウィンドウのみで設定 (例: cd /sdcard).</string>

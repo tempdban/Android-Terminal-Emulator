@@ -985,6 +985,26 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
                 }
             }
         }).start();
+
+        /*
+        TermVimInstaller.update(this, new Runnable() {
+            @Override
+            public void run() {
+                if (mTermService == null) return;
+                try {
+                    new AlertDialog.Builder(Term.this).setTitle(R.string.menu_update).setMessage(R.string.menu_update_vim_success)
+                            .setCancelable(false).setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    }).show();
+                } catch (WindowManager.BadTokenException e) {
+                    // Activity finished - ignore.
+                }
+            }
+        });
+        */
     }
 
     public static String getVersionName(Context context) {
