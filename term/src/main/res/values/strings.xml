@@ -20,7 +20,7 @@
    <string name="x">X</string>
    <string name="user">\?</string>
    <string name="application_terminal">Terminal Emulator</string>
-   <string name="application_termvim">TermVim</string>
+   <string name="application_termvim">TermuxVim</string>
    <string name="application_termux">Termux</string>
    <string name="preferences">Preferences</string>
    <string name="new_window">New window</string>
