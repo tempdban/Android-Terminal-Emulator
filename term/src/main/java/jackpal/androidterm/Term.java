@@ -43,6 +43,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.channels.FileChannel;
@@ -930,6 +933,8 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
             doToggleSoftKeyboard();
         } else if (id == R.id.menu_toggle_function_bar) {
             setFunctionBar(2);
+        } else if (id == R.id.menu_update) {
+            networkUpdate();
         } else if (id == R.id.menu_toggle_wakelock) {
             doToggleWakeLock();
         } else if (id == R.id.menu_toggle_wifilock) {
@@ -944,6 +949,48 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
             mActionBar.hide();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void networkUpdate() {
+        new Thread(new Runnable() {
+            public void run() {
+                try {
+                    String address = "https://raw.githubusercontent.com/fuenor/Android-Terminal-Emulator/downloads/apk/version";
+                    URLConnection conn = new URL(address).openConnection();
+                    InputStream in = conn.getInputStream();
+                    int length = conn.getContentLength();
+                    if (length == -1) length = 32;
+                    byte[] data = new byte[length];
+                    length = in.read(data, 0, length);
+                    in.close();
+                    if (length > 2) length -= 1;
+                    byte[] target = new byte[length];
+                    for (int i = 0; i < length; i++) {
+                        target[i] = data[i];
+                    }
+                    byte[] current = getVersionName(mTermService.getBaseContext()).getBytes();
+
+                    if (!Arrays.equals(target, current)) {
+                        address = getString(R.string.update_url);
+                        execURL(address);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    public static String getVersionName(Context context) {
+        PackageManager pm = context.getPackageManager();
+        String versionName = "";
+        try {
+            PackageInfo packageInfo = pm.getPackageInfo(context.getPackageName(), 0);
+            versionName = packageInfo.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return versionName;
     }
 
     private static boolean mVimApp = false;
@@ -1280,6 +1327,9 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
             return true;
         case 0xfffffffb:
             doAndroidIntent(mSettings.getHomePath() + "/.intent");
+            return true;
+        case 0xfffffffc:
+            networkUpdate();
             return true;
         default:
             return super.onKeyUp(keyCode, event);
