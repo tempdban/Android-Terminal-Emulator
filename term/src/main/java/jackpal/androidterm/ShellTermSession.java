@@ -122,9 +122,20 @@ public class ShellTermSession extends GenericTermSession {
         sendInitialCommand(mInitialCommand);
     }
 
-    private void sendInitialCommand(String initialCommand) {
+    static boolean mFirst = true;
+    private void sendInitialCommand(final String initialCommand) {
         if (initialCommand.length() > 0) {
-            write(initialCommand + '\r');
+            if (!mFirst) {
+                write(initialCommand + '\r');
+            } else {
+                new android.os.Handler().postDelayed(
+                        new Runnable() {
+                            public void run() {
+                                write(initialCommand + '\r');
+                            }
+                        }, 300);
+                mFirst = false;
+            }
         }
     }
 
