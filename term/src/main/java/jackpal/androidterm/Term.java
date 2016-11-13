@@ -461,6 +461,7 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
 
         updatePrefs();
         permissionCheckExternalStorage();
+        setDonateButton();
         setDrawerButtons();
         restoreSyncFileObserver();
         mAlreadyStarted = true;
@@ -530,6 +531,11 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
         } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    private void setDonateButton() {
+        Button button = (Button)findViewById(R.id.drawer_donate_button);
+        button.setVisibility(View.GONE);
     }
 
     private void setDrawerButtons() {
