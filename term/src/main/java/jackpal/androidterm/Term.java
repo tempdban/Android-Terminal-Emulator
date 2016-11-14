@@ -531,9 +531,51 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
     private void setDrawerButtons() {
         if (BuildConfig.FLAVOR.equals("vim")) {
             Button button;
+            List<ApplicationInfo> appInfoList = getPackageManager().getInstalledApplications(PackageManager.GET_META_DATA);
+            for (ApplicationInfo info : appInfoList) {
+                if ("com.dropbox.android".equals(info.processName)) {
+                    button = (Button)findViewById(R.id.drawer_dropbox_button);
+                    button.setVisibility(View.VISIBLE);
+                    break;
+                }
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                button = (Button)findViewById(R.id.drawer_storage_button);
+                button.setVisibility(View.VISIBLE);
+                button = (Button)findViewById(R.id.drawer_createfile_button);
+                button.setVisibility(View.VISIBLE);
+            }
             button = (Button)findViewById(R.id.drawer_clear_cache_button);
             button.setVisibility(View.VISIBLE);
         }
+        findViewById(R.id.drawer_dropbox_button).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getDrawer().closeDrawers();
+                Intent intent = new Intent(Intent.ACTION_MAIN);
+                intent.setAction("android.intent.category.LAUNCHER");
+                intent.setClassName("com.dropbox.android", "com.dropbox.android.activity.DropboxBrowser");
+                startActivity(intent);
+            }
+        });
+        findViewById(R.id.drawer_storage_button).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getDrawer().closeDrawers();
+                filepicker();
+            }
+        });
+        findViewById(R.id.drawer_createfile_button).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getDrawer().closeDrawers();
+                Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                intent.setType("text/plain");
+                intent.putExtra(Intent.EXTRA_TITLE, "Newfile.txt");
+                startActivityForResult(intent, REQUEST_FILE_PICKER);
+            }
+        });
         findViewById(R.id.drawer_clear_cache_button).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1288,6 +1330,15 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
         if (mTermSessions.size() != 0) {
             mViewFlipper.showNext();
         }
+    }
+
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    private void filepicker() {
+        permissionCheckExternalStorage();
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("*/*");
+        startActivityForResult(intent, REQUEST_FILE_PICKER);
     }
 
     @Override
