@@ -122,9 +122,9 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
 
     private TermSettings mSettings;
 
-    private final static int SELECT_TEXT_ID = 0;
+    private final static int PASTE_ID = 0;
     private final static int COPY_ALL_ID = 1;
-    private final static int PASTE_ID = 2;
+    private final static int SELECT_TEXT_ID = 2;
     private final static int SEND_CONTROL_KEY_ID = 3;
     private final static int SEND_FN_KEY_ID = 4;
     private final static int SEND_FUNCTION_BAR_ID = 5;
@@ -1264,6 +1264,11 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
             wifiLockItem.setTitle(R.string.enable_wifilock);
         }
         menu.removeItem(R.id.menu_window_list);
+        menu.removeItem(R.id.menu_toggle_soft_keyboard);
+        menu.removeItem(R.id.menu_special_keys);
+        menu.removeItem(R.id.menu_send_email);
+        menu.removeItem(R.id.menu_update);
+        menu.removeItem(R.id.action_help);
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -1271,14 +1276,14 @@ public class Term extends Activity implements UpdateCallback, SharedPreferences.
     public void onCreateContextMenu(ContextMenu menu, View v,
             ContextMenuInfo menuInfo) {
       super.onCreateContextMenu(menu, v, menuInfo);
-      menu.setHeaderTitle(R.string.edit_text);
-      menu.add(0, SELECT_TEXT_ID, 0, R.string.select_text);
-      menu.add(0, COPY_ALL_ID, 0, R.string.copy_all);
+      // menu.setHeaderTitle(R.string.edit_text);
       menu.add(0, PASTE_ID, 0, R.string.paste);
+      menu.add(0, COPY_ALL_ID, 0, R.string.copy_all);
+      menu.add(0, SELECT_TEXT_ID, 0, R.string.select_text);
       // menu.add(0, SEND_CONTROL_KEY_ID, 0, R.string.send_control_key);
       // menu.add(0, SEND_FN_KEY_ID, 0, R.string.send_fn_key);
+      menu.add(0, SEND_FUNCTION_BAR_ID, 0, R.string.toggle_function_bar);
       menu.add(0, SEND_MENU_ID, 0, R.string.title_functionbar_menu);
-      // menu.add(0, SEND_FUNCTION_BAR_ID, 0, R.string.toggle_function_bar);
       if (!canPaste()) {
           menu.getItem(PASTE_ID).setEnabled(false);
       }
