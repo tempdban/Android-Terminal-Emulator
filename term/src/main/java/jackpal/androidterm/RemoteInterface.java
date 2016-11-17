@@ -22,9 +22,11 @@ import java.util.UUID;
 
 import android.app.Activity;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -33,6 +35,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.widget.Toast;
 
+import jackpal.androidterm.compat.AndroidCompat;
 import jackpal.androidterm.emulatorview.TermSession;
 import jackpal.androidterm.emulatorview.compat.ClipboardManagerCompat;
 import jackpal.androidterm.emulatorview.compat.ClipboardManagerCompatFactory;
@@ -146,7 +149,33 @@ public class RemoteInterface extends Activity {
                    (action.equals("android.intent.action.PICK")) ||
                    (action.equals("com.googlecode.android_scripting.action.EDIT_SCRIPT"))) {
             String url = null;
-            if (action.equals("com.googlecode.android_scripting.action.EDIT_SCRIPT")) {
+            Uri uri = myIntent.getData();
+            if (uri.getScheme().equals("content") && BuildConfig.FLAVOR.matches("vim")) {
+                Context context = this;
+                String command = null;
+                String path = Term.getPath(context, uri);
+                if (path != null) {
+                    path = path.replaceAll("([ ()%#&])", "\\\\$1");
+                    command = "\u001b"+String.format(":e %s", path);
+                } else if ((AndroidCompat.SDK >= 13) && (command == null)) {
+                    Cursor cursor = getContentResolver().query(uri, null, null, null, null, null);
+                    path = Term.handleOpenDocument(uri, cursor);
+                    if (path != null) {
+                        File dir = new File(this.getExternalCacheDir().toString()+"/scratch");
+                        SyncFileObserver sfo = new SyncFileObserver(path);
+                        sfo.setConTentResolver(this.getContentResolver());
+                        path = dir.toString()+path;
+                        sfo.putUriAndLoad(uri, path);
+                        path = path.replaceAll("([ ()%#&])", "\\\\$1");
+                        command = "\u001b"+String.format(":e %s", path);
+                    }
+                }
+                // Find the target window
+                mReplace = true;
+                mHandle = switchToWindow(mHandle, command);
+                mReplace = false;
+                finish();
+            } else if (action.equals("com.googlecode.android_scripting.action.EDIT_SCRIPT")) {
                 url = myIntent.getExtras().getString("com.googlecode.android_scripting.extra.SCRIPT_PATH");
             } else if (myIntent.getScheme() != null && myIntent.getScheme().equals("file")) {
                 if (myIntent.getData() != null) url = myIntent.getData().getPath();

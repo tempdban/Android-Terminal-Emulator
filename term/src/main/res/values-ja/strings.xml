@@ -259,4 +259,8 @@
   <string name="addshortcut_arguments_label">引数\:</string>
   <string name="addshortcut_shortcut_label">ラベル\:</string>
   <string name="addshortcut_button_text_icon">テキストアイコン</string>
+  <string name="external_storage">ストレージ</string>
+  <string name="create_file">新規ファイル</string>
+  <string name="clear_cache">キャッシュクリア</string>
+  <string name="confirm_clear_cache_message">外部ストレージキャッシュを削除します.</string>
 </resources>

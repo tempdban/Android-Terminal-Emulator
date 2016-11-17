@@ -80,6 +80,12 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </service>
+        <receiver android:name=".MediaAvailabilityBroadcastReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.MEDIA_MOUNTED"/>
+                <action android:name="android.intent.action.MEDIA_REMOVED"/>
+            </intent-filter>
+        </receiver>
         <meta-data
             android:name="com.sec.android.support.multiwindow"
             android:value="true">

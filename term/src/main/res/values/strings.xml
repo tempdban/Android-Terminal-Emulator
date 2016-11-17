@@ -286,4 +286,8 @@
   <string name="colorvalue_label_lock_button_column">LOCK</string>
   <string name="colorvalue_icon_text_entry_hint">Enter icon text</string>
   <!-- END SHORTCUT RELATED STRINGS -->
+  <string name="external_storage">Storage</string>
+  <string name="create_file">Create file</string>
+  <string name="clear_cache">Clear cache</string>
+  <string name="confirm_clear_cache_message">Clear external storage cache.</string>
 </resources>
