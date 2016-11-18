@@ -11,8 +11,8 @@ android {
         minSdkVersion 9
         targetSdkVersion 25
 
-        versionName = "1.0.70" + new SimpleDateFormat(".ss").format(new Date())
-        versionCode 71
+        versionName = "0.0.1" + new SimpleDateFormat(".ss").format(new Date())
+        versionCode 01
 
         ndk {
             abiFilters 'armeabi', 'x86', 'mips'
